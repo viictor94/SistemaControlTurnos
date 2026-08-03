@@ -183,25 +183,13 @@ function validarEmpleado(){
 
     mostrarCarga();
 
-    fetch("https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec", {
+    fetch(
+    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
+    + "?accion=registrarMarcacion"
+    + "&dni=" + encodeURIComponent(dniIngresado)
+)
 
-    method: "POST",
-
-    headers: {
-        "Content-Type": "application/json"
-    },
-
-    body: JSON.stringify({
-
-        accion: "registrarMarcacion",
-
-        dni: dniIngresado
-
-    })
-
-})
-
-.then(r => r.json())
+.then(response => response.json())
 
 .then(respuestaMarcacion)
 
