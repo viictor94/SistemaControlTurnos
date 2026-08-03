@@ -329,24 +329,29 @@ function guardarJustificacion(){
 
     mostrarCarga();
 
-    google.script.run
-        .withSuccessHandler(respuestaMarcacion)
-        .withFailureHandler(function(error){
+fetch(
+    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
+    + "?accion=registrarMarcacion"
+    + "&dni=" + encodeURIComponent(dniPendiente)
+    + "&motivo=" + encodeURIComponent(motivo)
+)
 
-            ocultarCarga();
+.then(response => response.json())
 
-            mostrarMensaje(
-                "error",
-                "No se pudo registrar la marcación."
-            );
+.then(respuestaMarcacion)
 
-            console.error(error);
+.catch(function(error){
 
-        })
-        .registrarMarcacion(
-            dniPendiente,
-            motivo
-        );
+    ocultarCarga();
+
+    mostrarMensaje(
+        "error",
+        "No se pudo registrar la marcación."
+    );
+
+    console.error(error);
+
+});
 
 }
 
