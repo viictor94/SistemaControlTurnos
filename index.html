@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sistema de Control Horario</title>
+
+  <?!= include("css"); ?>
+
+</head>
+
+<body oncontextmenu="return false;">
+
+    <!-- Barra Superior -->
+
+    <header class="topbar">
+
+        <div class="tituloSistema">
+
+            SISTEMA DE CONTROL HORARIO
+
+        </div>
+
+    </header>
+
+    <!-- Contenedor Principal -->
+
+    <main class="contenedor">
+
+        <div class="card">
+
+            <!-- Logo -->
+
+            <img  
+            src="<?!= config.Logo ?>"
+            id="logoEmpresa"
+            class="logo"
+            draggable="false"
+            alt="Logo Empresa">
+
+            <!-- Hora -->
+
+            <div id="hora"></div>
+
+            <!-- Fecha -->
+
+            <div id="fecha"></div>
+
+            <!-- Título -->
+
+            <div class="textoIngreso">
+
+                Ingrese su DNI
+
+            </div>
+
+            <!-- DNI -->
+
+            <input
+    type="text"
+    id="dni"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    maxlength="9"
+    autocomplete="off"
+    spellcheck="false"
+                placeholder="Ej: 30123456">
+
+            <!-- Botón principal -->
+
+            <button id="btnMarcar">
+
+                MARCAR
+
+            </button>
+
+            <!-- Botón secundario -->
+
+            <button id="btnAlmuerzo">
+
+                ALMUERZO
+
+            </button>
+
+            <!-- Mensajes del sistema -->
+
+           <div id="notificacion" class="oculto">
+              <span id="iconoMensaje"></span>
+              <span id="textoMensaje"></span>
+
+</div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+
+    <footer>
+
+        <span id="control">
+
+            Centro de Control
+
+        </span>
+
+    </footer>
+
+    <?!= include("js"); ?>
+
+<div id="overlayCarga">
+
+    <div class="iconoCarga">
+        <i class="fa-regular fa-clock"></i>
+    </div>
+
+    <div class="textoCarga">
+        Procesando...
+    </div>
+
+</div>
+
+<div id="modalJustificacion" class="modal">
+
+    <div class="modal-contenido">
+
+        <h2>Justificación requerida</h2>
+
+        <p>
+            El ingreso fue registrado como
+            <b>Fuera de Jornada</b>.
+        </p>
+
+        <textarea
+            id="txtJustificacion"
+            maxlength="300"
+            placeholder="Escriba aquí la justificación...">
+        </textarea>
+
+        <div class="modal-botones">
+
+            <button
+                id="btnCancelarJustificacion"
+                class="btn-secundario"
+                onclick="cancelarJustificacion()">
+
+                Cancelar
+
+            </button>
+
+            <button
+                id="btnGuardarJustificacion"
+                onclick="guardarJustificacion()">
+
+                Guardar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
