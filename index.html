@@ -1,172 +1,430 @@
-<!DOCTYPE html>
-<html>
+<script>
 
-<head>
+function actualizarHora(){
 
-  <base target="_top">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    const ahora = new Date();
 
-  <title>Sistema de Control Horario</title>
+    document.getElementById("hora").innerHTML =
+        ahora.toLocaleTimeString("es-AR",{
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:false
+        });
 
-  <?!= include("css"); ?>
+    document.getElementById("fecha").innerHTML =
+        ahora.toLocaleDateString("es-AR",{
+            weekday:"long",
+            year:"numeric",
+            month:"long",
+            day:"numeric"
+        });
 
-</head>
+}
 
-<body oncontextmenu="return false;">
+/*=========================================
+  OVERLAY DE CARGA
+=========================================*/
 
-    <!-- Barra Superior -->
+function mostrarCarga(){
 
-    <header class="topbar">
+    document
+        .getElementById("overlayCarga")
+        .classList.add("mostrar");
 
-        <div class="tituloSistema">
+    document.getElementById("btnMarcar").disabled = true;
+    document.getElementById("btnAlmuerzo").disabled = true;
+    document.getElementById("dni").disabled = true;
 
-            SISTEMA DE CONTROL HORARIO
+}
 
-        </div>
+function ocultarCarga(){
 
-    </header>
+    document
+        .getElementById("overlayCarga")
+        .classList.remove("mostrar");
 
-    <!-- Contenedor Principal -->
+    document.getElementById("btnMarcar").disabled = false;
+    document.getElementById("btnAlmuerzo").disabled = false;
+    document.getElementById("dni").disabled = false;
 
-    <main class="contenedor">
+}
 
-        <div class="card">
+/*=========================================
+  INICIALIZACIÓN
+=========================================*/
 
-            <!-- Logo -->
+actualizarHora();
 
-            <img  
-            src="<?!= config.Logo ?>"
-            id="logoEmpresa"
-            class="logo"
-            draggable="false"
-            alt="Logo Empresa">
+setInterval(actualizarHora,1000);
 
-            <!-- Hora -->
+const dni = document.getElementById("dni");
+let dniPendiente = "";
+window.onload = function(){
+    dni.focus();
+    mostrarMensaje(
+        "ok",
+        "Sistema listo para registrar marcaciones."
+    );
+};
 
-            <div id="hora"></div>
+/*=========================================
+  EVENTOS
+=========================================*/
 
-            <!-- Fecha -->
+dni.addEventListener("keypress",function(e){
 
-            <div id="fecha"></div>
+    if(dni.disabled){
+        return;
+    }
 
-            <!-- Título -->
+    if(e.key==="Enter"){
+        validarEmpleado();
+    }
 
-            <div class="textoIngreso">
+});
 
-                Ingrese su DNI
+document.addEventListener("keydown",function(e){
 
-            </div>
+    if(e.key==="F2"){
 
-            <!-- DNI -->
+        e.preventDefault();
 
-            <input
-    type="text"
-    id="dni"
-    inputmode="numeric"
-    pattern="[0-9]*"
-    maxlength="9"
-    autocomplete="off"
-    spellcheck="false"
-                placeholder="Ej: 30123456">
+        if(!dni.disabled){
+            registrarAlmuerzo();
+        }
 
-            <!-- Botón principal -->
+    }
 
-            <button id="btnMarcar">
+});
 
-                MARCAR
+document
+    .getElementById("btnMarcar")
+    .addEventListener("click",validarEmpleado);
 
-            </button>
+document
+    .getElementById("btnAlmuerzo")
+    .addEventListener("click",registrarAlmuerzo);
 
-            <!-- Botón secundario -->
+    /*=========================================
+  MENSAJES
+=========================================*/
 
-            <button id="btnAlmuerzo">
+function mostrarMensaje(tipo,texto){
 
-                ALMUERZO
+    const caja = document.getElementById("notificacion");
+    const icono = document.getElementById("iconoMensaje");
+    const mensaje = document.getElementById("textoMensaje");
 
-            </button>
+    caja.className = "";
 
-            <!-- Mensajes del sistema -->
+    switch(tipo){
 
-           <div id="notificacion" class="oculto">
-              <span id="iconoMensaje"></span>
-              <span id="textoMensaje"></span>
+        case "ok":
 
-</div>
+            caja.classList.add("exito");
+            icono.innerHTML = "✅";
+            break;
 
-        </div>
+        case "error":
 
-    </main>
+            caja.classList.add("error");
+            icono.innerHTML = "⛔";
+            break;
 
-    <!-- Footer -->
+        case "alerta":
 
-    <footer>
+            caja.classList.add("alerta");
+            icono.innerHTML = "⚠️";
+            break;
 
-        <span id="control">
+        default:
 
-            Centro de Control
+            caja.classList.add("info");
+            icono.innerHTML = "ℹ️";
 
-        </span>
+    }
 
-    </footer>
+    mensaje.innerHTML = texto;
 
-    <?!= include("js"); ?>
+    caja.classList.add("mostrar");
+    document
+    .getElementById("overlayNotificacion")
+    .classList.add("mostrar");
 
-<div id="overlayCarga">
+setTimeout(function(){
 
-    <div class="iconoCarga">
-        <i class="fa-regular fa-clock"></i>
-    </div>
+    caja.classList.remove("mostrar");
 
-    <div class="textoCarga">
-        Procesando...
-    </div>
+    document
+        .getElementById("overlayNotificacion")
+        .classList.remove("mostrar");
 
-</div>
+},2000);
 
-<div id="modalJustificacion" class="modal">
+}
 
-    <div class="modal-contenido">
+/*=========================================
+  VALIDAR EMPLEADO
+=========================================*/
 
-        <h2>Justificación requerida</h2>
+function validarEmpleado(){
 
-        <p>
-            El ingreso fue registrado como
-            <b>Fuera de Jornada</b>.
-        </p>
+    const dniIngresado = dni.value.trim();
 
-        <textarea
-            id="txtJustificacion"
-            maxlength="300"
-            placeholder="Escriba aquí la justificación...">
-        </textarea>
+    if(dniIngresado==""){
 
-        <div class="modal-botones">
+        mostrarMensaje(
+            "alerta",
+            "Ingrese un DNI."
+        );
 
-            <button
-                id="btnCancelarJustificacion"
-                class="btn-secundario"
-                onclick="cancelarJustificacion()">
+        return;
 
-                Cancelar
+    }
 
-            </button>
+    mostrarCarga();
 
-            <button
-                id="btnGuardarJustificacion"
-                onclick="guardarJustificacion()">
+    google.script.run
+        .withSuccessHandler(respuestaMarcacion)
+        .withFailureHandler(function(error){
 
-                Guardar
+            ocultarCarga();
 
-            </button>
+            mostrarMensaje(
+                "error",
+                "Error de comunicación con el servidor."
+            );
 
-        </div>
+            console.error(error);
 
-    </div>
+        })
+        .registrarMarcacion(dniIngresado);
 
-</div>
+}
 
-</body>
+/*=========================================
+  ALMUERZO
+=========================================*/
 
-</html>
+function registrarAlmuerzo(){
+
+    const dniIngresado = dni.value.trim();
+
+    if(dniIngresado==""){
+
+        mostrarMensaje(
+            "alerta",
+            "Ingrese un DNI."
+        );
+
+        return;
+
+    }
+
+    mostrarCarga();
+
+    google.script.run
+        .withSuccessHandler(respuestaMarcacion)
+        .withFailureHandler(function(error){
+
+            ocultarCarga();
+
+            mostrarMensaje(
+                "error",
+                "Error de comunicación con el servidor."
+            );
+
+            console.error(error);
+
+        })
+        .registrarAlmuerzo(dniIngresado);
+
+}
+
+function abrirModalJustificacion(dni){
+
+    dniPendiente = dni;
+
+    document.getElementById("txtJustificacion").value = "";
+    document.getElementById("contadorJustificacion").innerHTML ="0 / 150";
+
+    document
+        .getElementById("modalJustificacion")
+        .classList.add("mostrar");
+
+    document
+        .getElementById("txtJustificacion")
+        .focus();
+    const txt = document.getElementById("txtJustificacion");
+    txt.oninput = function(){
+
+    document.getElementById("contadorJustificacion").innerHTML =
+        this.value.length + " / 150";
+
+};
+
+txt.onkeydown = function(e){
+
+    if(e.key==="Enter" && !e.shiftKey){
+
+        e.preventDefault();
+
+        guardarJustificacion();
+
+    }
+
+};    
+
+}
+
+
+function cerrarModalJustificacion(){
+
+    document
+        .getElementById("modalJustificacion")
+        .classList.remove("mostrar");
+
+}
+
+function cancelarJustificacion(){
+
+    cerrarModalJustificacion();
+
+    document.getElementById("dni").select();
+    document.getElementById("dni").focus();
+
+}
+
+function guardarJustificacion(){
+
+    const motivo =
+        document
+            .getElementById("txtJustificacion")
+            .value
+            .trim();
+
+    if(motivo==""){
+
+        mostrarMensaje(
+            "alerta",
+            "Debe ingresar una justificación."
+        );
+
+        return;
+
+    }
+
+    cerrarModalJustificacion();
+
+    mostrarCarga();
+
+    google.script.run
+        .withSuccessHandler(respuestaMarcacion)
+        .withFailureHandler(function(error){
+
+            ocultarCarga();
+
+            mostrarMensaje(
+                "error",
+                "No se pudo registrar la marcación."
+            );
+
+            console.error(error);
+
+        })
+        .registrarMarcacion(
+            dniPendiente,
+            motivo
+        );
+
+}
+
+/*=========================================
+  RESPUESTA DEL SERVIDOR
+=========================================*/
+
+function respuestaMarcacion(respuesta){
+    ocultarCarga();
+if (respuesta.requiereJustificacion) {
+
+    abrirModalJustificacion(
+        document.getElementById("dni").value.trim()
+    );
+
+    return;
+
+}
+
+    if(!respuesta.ok){
+
+        document.getElementById("dni").select();
+
+        mostrarMensaje(
+            "error",
+            respuesta.mensaje
+        );
+
+        return;
+
+    }
+
+    let texto = "";
+
+    switch(respuesta.evento){
+
+        case "E1":
+    texto =
+        "¡Bienvenido!<br><br>" +
+        "<span style='font-size:30px;font-weight:bold;'>" +
+        respuesta.empleado +
+        "</span><br><br>" +
+        "Que tengas Buena jornada.";
+
+    break;
+
+        case "S1":
+            texto = "Salida registrada.";
+            break;
+
+        case "E2":
+            texto = "Ingreso registrado.";
+            break;
+
+       case "SF":
+    texto =
+        "<div style='font-size:18px;'>¡Hasta mañana!</div>" +
+        "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
+        respuesta.empleado +
+        "</div>" +
+        "<div style='font-size:18px;'>Que tengas buen Descanso.</div>";
+
+    break;
+
+        case "A1":
+    texto =
+        "<div style='font-size:18px;'>¡Almuerzo Registrado!</div>" +
+        "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
+        respuesta.empleado +
+        "</div>" +
+        "<div style='font-size:18px;'>Disfrutá tu Descanso.</div>";
+
+    break;
+
+        case "A2":
+            texto = "Final de almuerzo registrado.";
+            break;
+
+        default:
+            texto = "Marcación registrada correctamente.";
+
+    }
+
+    mostrarMensaje("ok", texto);
+
+    document.getElementById("dni").value = "";
+    document.getElementById("dni").focus();
+
+}
+
+</script>
