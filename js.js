@@ -183,23 +183,40 @@ function validarEmpleado(){
 
     mostrarCarga();
 
-    google.script.run
-        .withSuccessHandler(respuestaMarcacion)
-        .withFailureHandler(function(error){
+    fetch("https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec", {
 
-            ocultarCarga();
+    method: "POST",
 
-            mostrarMensaje(
-                "error",
-                "Error de comunicación con el servidor."
-            );
+    headers: {
+        "Content-Type": "application/json"
+    },
 
-            console.error(error);
+    body: JSON.stringify({
 
-        })
-        .registrarMarcacion(dniIngresado);
+        accion: "registrarMarcacion",
 
-}
+        dni: dniIngresado
+
+    })
+
+})
+
+.then(r => r.json())
+
+.then(respuestaMarcacion)
+
+.catch(function(error){
+
+    ocultarCarga();
+
+    mostrarMensaje(
+        "error",
+        "Error de comunicación con el servidor."
+    );
+
+    console.error(error);
+
+});
 
 /*=========================================
   ALMUERZO
