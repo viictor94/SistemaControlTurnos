@@ -227,21 +227,28 @@ function registrarAlmuerzo(){
 
     mostrarCarga();
 
-    google.script.run
-        .withSuccessHandler(respuestaMarcacion)
-        .withFailureHandler(function(error){
+fetch(
+    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
+    + "?accion=registrarAlmuerzo"
+    + "&dni=" + encodeURIComponent(dniIngresado)
+)
 
-            ocultarCarga();
+.then(response => response.json())
 
-            mostrarMensaje(
-                "error",
-                "Error de comunicación con el servidor."
-            );
+.then(respuestaMarcacion)
 
-            console.error(error);
+.catch(function(error){
 
-        })
-        .registrarAlmuerzo(dniIngresado);
+    ocultarCarga();
+
+    mostrarMensaje(
+        "error",
+        "Error de comunicación con el servidor."
+    );
+
+    console.error(error);
+
+});
 
 }
 
