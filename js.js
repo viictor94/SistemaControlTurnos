@@ -298,7 +298,9 @@ function cerrarModalJustificacion(){
 }
 
 function cancelarJustificacion(){
-
+    document
+    .getElementById("btnCancelarJustificacion")
+    .addEventListener("click", cancelarJustificacion);
     cerrarModalJustificacion();
 
     document.getElementById("dni").select();
