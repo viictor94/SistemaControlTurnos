@@ -103,6 +103,9 @@ document
 document
     .getElementById("btnAlmuerzo")
     .addEventListener("click",registrarAlmuerzo);
+document
+    .getElementById("btnCancelarJustificacion")
+    .addEventListener("click", cancelarJustificacion);
 
     /*=========================================
   MENSAJES
@@ -298,9 +301,7 @@ function cerrarModalJustificacion(){
 }
 
 function cancelarJustificacion(){
-    document
-    .getElementById("btnCancelarJustificacion")
-    .addEventListener("click", cancelarJustificacion);
+
     cerrarModalJustificacion();
 
     document.getElementById("dni").select();
