@@ -156,9 +156,15 @@
         <div id="textoMensaje"></div>
 
     </div>
-
-</body>
-
+    
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+        navigator.serviceWorker.register("./sw.js");
+    });
+}
+</script>
 <script src="js.js"></script>
-
+    
+</body>
 </html>
