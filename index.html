@@ -16,7 +16,7 @@
 
     <meta name="apple-mobile-web-app-title" content="Control Horario">
 
-    <title>Sistema de Control Horario</title>
+    <title>Version Dev - Control Horario</title>
 
     <link rel="stylesheet" href="css.css">
 
@@ -30,7 +30,7 @@
 
     <div class="tituloSistema">
 
-        Sistema de Control Horario
+        Version Dev - Control Horario
 
     </div>
 
@@ -76,7 +76,7 @@
         <button id="btnAlmuerzo">
 
             ALMUERZO
-
+          <span class="atajo">F2</span>
         </button>
 
     </div>
@@ -95,67 +95,105 @@
     
     <div id="overlayNotificacion"></div>
 
-    <div id="overlayCarga">
-
-        <div class="iconoCarga">
-            <i class="fa-regular fa-clock"></i>
-        </div>
-
-        <div class="textoCarga">
-            Procesando...
-        </div>
-
+<div id="overlayCarga">
+    <div class="iconoCarga">
+        <i class="fa-regular fa-clock"></i>
     </div>
+    <div class="textoCarga">
+        Procesando...
+    </div>
+</div>
 
-    <div id="modalJustificacion" class="modal">
+<!-- Modal Justificación -->
 
-        <div class="modal-contenido">
+<div id="modalJustificacion" class="modal">
 
-            <h2>Justificación requerida</h2>
+    <div class="modal-contenido">
 
-            <p>
-                El ingreso fue registrado como
-                <b>Fuera de Jornada</b>.
-            </p>
+        <h2>Justificación requerida</h2>
 
-            <textarea
-                id="txtJustificacion"
-                maxlength="150"
-                placeholder="Explique brevemente el motivo...">
-            </textarea>
+        <p>
+            El ingreso fue registrado como
+            <b>Fuera de Jornada</b>.
+        </p>
 
-            <div id="contadorJustificacion">0 / 150</div>
+        <textarea
+            id="txtJustificacion"
+            maxlength="150"
+            placeholder="Explique brevemente el motivo..."></textarea>
 
-            <div class="modal-botones">
+        <div id="contadorJustificacion">0 / 150</div>
 
-                <button
-                    id="btnCancelarJustificacion"
-                    class="btn-secundario">
+        <div class="modal-botones">
 
-                    Cancelar
+            <button
+                id="btnCancelarJustificacion"
+                class="btn-secundario">
 
-                </button>
+                Cancelar
 
-                <button
-                    id="btnGuardarJustificacion">
+            </button>
 
-                    Guardar
+            <button
+                id="btnGuardarJustificacion">
 
-                </button>
+                Guardar
 
-            </div>
+            </button>
 
         </div>
 
     </div>
 
-    <div id="notificacion">
+</div>
 
-        <div id="iconoMensaje"></div>
+<!-- Modal Dispositivo -->
 
-        <div id="textoMensaje"></div>
+<div id="modalDispositivo" class="modal">
+
+    <div class="modal-contenido">
+
+        <span id="cerrarModalDispositivo" class="cerrar-modal">
+            ✕
+        </span>
+
+        <h2>Equipo no autorizado</h2>
+
+        <p>
+            Comuníquese con Gerencia e informe el siguiente código.
+        </p>
+
+        <div id="codigoDispositivo" class="codigo-dispositivo"></div>
+
+        <p>
+            Este equipo aún no fue habilitado Para Registrar Movimientos.
+        </p>
+
+        <div class="modal-botones">
+
+            <button
+                id="btnCerrarDispositivo"
+                class="btn-secundario">
+
+                Cerrar
+
+            </button>
+
+        </div>
 
     </div>
+
+</div>
+
+<!-- Notificaciones -->
+
+<div id="notificacion">
+
+    <div id="iconoMensaje"></div>
+
+    <div id="textoMensaje"></div>
+
+</div>
     
 <script>
 if ("serviceWorker" in navigator) {

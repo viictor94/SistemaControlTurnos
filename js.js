@@ -58,14 +58,43 @@ setInterval(actualizarHora,1000);
 
 const dni = document.getElementById("dni");
 let dniPendiente = "";
+
+const DEVICE_KEY = "PTH_DEVICE_ID";
+
+function obtenerIdDispositivo() {
+
+    let id = localStorage.getItem(DEVICE_KEY);
+
+    if (!id) {
+
+        id =
+            "PTH-" +
+            crypto.randomUUID()
+                .replace(/-/g, "")
+                .substring(0, 12)
+                .toUpperCase();
+
+        localStorage.setItem(DEVICE_KEY, id);
+
+    }
+
+    return id;
+
+}
+
+// Genera (o recupera) el ID apenas inicia la aplicación
+obtenerIdDispositivo();
+
 window.onload = function(){
+
     dni.focus();
+
     mostrarMensaje(
         "ok",
         "Sistema listo para registrar marcaciones."
     );
-};
 
+};
 /*=========================================
   EVENTOS
 =========================================*/
@@ -106,6 +135,13 @@ document
 document
     .getElementById("btnCancelarJustificacion")
     .addEventListener("click", cancelarJustificacion);
+document
+    .getElementById("btnCerrarDispositivo")
+    .addEventListener("click", cerrarModalDispositivo);
+
+document
+    .getElementById("cerrarModalDispositivo")
+    .addEventListener("click", cerrarModalDispositivo);
 
     /*=========================================
   MENSAJES
@@ -187,9 +223,10 @@ function validarEmpleado(){
     mostrarCarga();
 
     fetch(
-    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
+    "https://script.google.com/macros/s/AKfycbxCdDy-UJ5gG8ghlZHnhARXumSJPibwnW8ELfU9u8a45BNl33YIy-6GPvHvhZGiqXgn/exec"
     + "?accion=registrarMarcacion"
     + "&dni=" + encodeURIComponent(dniIngresado)
+    + "&dispositivo=" + encodeURIComponent(obtenerIdDispositivo())
 )
 
 .then(response => response.json())
@@ -231,9 +268,10 @@ function registrarAlmuerzo(){
     mostrarCarga();
 
 fetch(
-    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
+    "https://script.google.com/macros/s/AKfycbxCdDy-UJ5gG8ghlZHnhARXumSJPibwnW8ELfU9u8a45BNl33YIy-6GPvHvhZGiqXgn/exec"
     + "?accion=registrarAlmuerzo"
     + "&dni=" + encodeURIComponent(dniIngresado)
+    + "&dispositivo=" + encodeURIComponent(obtenerIdDispositivo())
 )
 
 .then(response => response.json())
@@ -300,6 +338,27 @@ function cerrarModalJustificacion(){
 
 }
 
+function abrirModalDispositivo(id){
+
+    document.getElementById("codigoDispositivo").innerHTML = id;
+
+    document
+        .getElementById("modalDispositivo")
+        .classList.add("mostrar");
+
+}
+
+function cerrarModalDispositivo(){
+
+    document
+        .getElementById("modalDispositivo")
+        .classList.remove("mostrar");
+
+    document.getElementById("dni").select();
+    document.getElementById("dni").focus();
+
+}
+
 function cancelarJustificacion(){
 
     cerrarModalJustificacion();
@@ -333,10 +392,11 @@ function guardarJustificacion(){
     mostrarCarga();
 
 fetch(
-    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
+    "https://script.google.com/macros/s/AKfycbxCdDy-UJ5gG8ghlZHnhARXumSJPibwnW8ELfU9u8a45BNl33YIy-6GPvHvhZGiqXgn/exec"
     + "?accion=registrarMarcacion"
     + "&dni=" + encodeURIComponent(dniPendiente)
     + "&motivo=" + encodeURIComponent(motivo)
+    + "&dispositivo=" + encodeURIComponent(obtenerIdDispositivo())
 )
 
 .then(response => response.json())
@@ -374,6 +434,14 @@ if (respuesta.requiereJustificacion) {
 
 }
 
+    if (respuesta.equipoNoAutorizado) {
+
+    abrirModalDispositivo(respuesta.dispositivo);
+
+    return;
+
+}
+    
     if(!respuesta.ok){
 
         document.getElementById("dni").select();

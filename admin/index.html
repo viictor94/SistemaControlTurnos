@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Control | Panther</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../logo2.png" alt="Panther">
+            </div>
+            <nav>
+                <a href="#" class="activo" id="menuDashboard">
+                    <i class="fa-solid fa-house"></i>
+                    Dashboard
+                </a>
+
+                <a href="#" id="menuEmpleados">
+                    <i class="fa-solid fa-users"></i>
+                    Empleados
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-clock"></i>
+                    Marcaciones
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Incidencias
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-computer"></i>
+                    Dispositivos
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-building"></i>
+                    Sucursales
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-business-time"></i>
+                    Turnos
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-chart-column"></i>
+                    Reportes
+                </a>
+
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    Configuraciónes
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <span class="ultima-actualizacion">
+                    Última actualización
+                </span>
+                <span id="horaActualizacion">
+                    --
+                </span>
+                <button id="btnActualizarDashboard">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Actualizar
+                </button>
+            </div>
+        </aside>
+
+        <main class="contenido">
+            <header class="topbar">
+                <div>
+                    <h1>Dashboard</h1>
+                    <span>
+                        Centro de Control
+                    </span>
+                </div>
+                <div class="usuario">
+                    <i class="fa-solid fa-user-circle"></i>
+                    Administrador
+                </div>
+            </header>
+
+            <section id="dashboard">
+                <div class="dashboard-grid">
+                    <div class="kpi-card kpi-presentes">
+                        <span class="kpi-titulo">
+                            Presentes
+                        </span>
+                        <span class="kpi-numero" id="kpiPresentes">--</span>
+                    </div>
+
+                    <div class="kpi-card kpi-almuerzo">
+                        <span class="kpi-titulo">
+                            En Almuerzo
+                        </span>
+                        <span class="kpi-numero" id="kpiAlmuerzo">
+                            --
+                        </span>
+                    </div>
+
+                    <div class="kpi-card kpi-ausentes">
+                        <span class="kpi-titulo">
+                            Ausentes
+                        </span>
+                        <span class="kpi-numero" id="kpiAusentes">
+                            --
+                        </span>
+
+                    </div>
+                    <div class="kpi-card kpi-incidencias">
+                        <span class="kpi-titulo">
+                            Incidencias
+                        </span>
+                        <span class="kpi-numero" id="kpiIncidencias">
+                            --
+                        </span>
+                    </div>
+                </div>
+
+                <div class="paneles-dashboard">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>Incidencias de Hoy</h2>
+                            <span id="fechaIncidencias"></span>
+                        </div>
+                        <div id="listaIncidencias"></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>Últimas marcaciones - Hoy</h2>
+                        </div>
+                        <div id="listaMarcaciones"></div>
+                    </div>
+                </div>
+                <div class="panel panel-resumen">
+                    <div class="panel-header">
+                        <h2>Resumen del día</h2>
+                        <button id="btnCopiarResumen" class="btn-copiar">
+                            <i class="fa-regular fa-copy"></i>
+                            Copiar
+                        </button>
+                    </div>
+                    <pre id="textoResumen"></pre>
+                </div>
+            </section>
+
+            <section id="empleados" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Empleados</h2>                  
+                        <div>
+                            <input
+                                type="text"
+                                id="buscarEmpleado"
+                                placeholder="Buscar empleado..."
+                            >                    
+                            <button id="btnActualizarEmpleados" type="button">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                Actualizar
+                            </button>                    
+                            <button id="btnNuevoEmpleado" type="button">
+                                <i class="fa-solid fa-plus"></i>
+                                Nuevo
+                            </button>
+                        </div>
+                    </div>
+                    <table class="tabla-empleados">
+                        <thead>
+                            <tr>
+                                <th>Legajo</th>
+                                <th>DNI</th>
+                                <th>Apellido</th>
+                                <th>Nombre</th>
+                                <th>Sucursal</th>
+                                <th>Turno</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaEmpleados">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="notificacion" class="notificacion">
+        <i id="notificacionIcono" class="fa-solid fa-circle-check"></i>
+        <span id="notificacionTexto"></span>
+    </div>
+    <div id="overlayCarga" class="overlay-carga">
+        <div class="cargando">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span id="textoOverlay">Actualizando información...</span>
+        </div>
+    </div>
+    <div id="modalEmpleado" class="modal">
+    <div class="modal-contenido">
+        <div class="modal-header">
+            <h2 id="tituloModalEmpleado">
+                Editar empleado
+            </h2>
+            <button id="btnCerrarModal" type="button">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="campo">
+               <label>Legajo</label>
+                <input type="text" id="txtLegajo" readonly>
+            </div>
+            <div class="campo">
+                <label>DNI</label>
+                <input type="text" id="txtDni" readonly>
+            </div>
+            <div class="campo">
+                <label>Apellido</label>
+                <input type="text" id="txtApellido">
+            </div>
+            <div class="campo">
+                <label>Nombre</label>
+                <input type="text" id="txtNombre">
+            </div>
+            <div class="campo">
+                <label>Sucursal</label>
+                <select id="txtSucursal">
+                    <option value="">
+                        -- Seleccione una sucursal --
+                    </option>
+                </select>
+            </div>
+            <div class="campo">
+                <label>Turno</label>
+                <select id="txtTurno">
+                    <option value="">
+                        -- Seleccione un turno --
+                    </option>
+                </select>
+                <div id="horarioTurno" class="horario-turno"></div>
+            </div>
+            <div class="campo">
+                <label>Estado</label>
+                <select id="txtEstado">
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="BAJA">BAJA</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+           <button id="btnCancelarEmpleado" type="button">
+               Cancelar
+           </button>
+           <button id="btnGuardarEmpleado" type="button">
+               Guardar
+           </button>
+       </div>
+   </div>
+</div>
+    <script src="js.js"></script>
+</body>
+</html>
