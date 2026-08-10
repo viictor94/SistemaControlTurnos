@@ -808,29 +808,37 @@ footer{
 }
 
 #codigoDispositivo{
-
     margin:22px auto;
-
     padding:14px;
-
     border:2px dashed #3e863c;
-
     border-radius:12px;
-
     background:#f5fbf5;
-
     color:#3e863c;
-
     font-size:24px;
-
     font-weight:700;
-
     letter-spacing:2px;
-
     user-select:all;
-
     word-break:break-all;
-
     max-width:100%;
 
+}
+
+.btn-actualizar-app {
+    margin-top: 12px;
+    padding: 8px 14px;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #344054;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-actualizar-app:hover {
+    background: #f2f4f7;
+}
+
+.btn-actualizar-app:disabled {
+    opacity: 0.6;
+    cursor: wait;
 }
