@@ -424,91 +424,97 @@ fetch(
 
 function respuestaMarcacion(respuesta){
     ocultarCarga();
-if (respuesta.requiereJustificacion) {
-
-    abrirModalJustificacion(
-        document.getElementById("dni").value.trim()
+    console.log(
+        "Respuesta del servidor:",
+        respuesta
     );
-
-    return;
-
-}
-
+    // =========================================
+    // JUSTIFICACIÓN
+    // =========================================
+    if (respuesta.requiereJustificacion) {
+        abrirModalJustificacion(
+            document.getElementById("dni").value.trim()
+        );
+        return;
+    }
+    // =========================================
+    // DISPOSITIVO NO AUTORIZADO
+    // =========================================
     if (respuesta.equipoNoAutorizado) {
-
-    abrirModalDispositivo(respuesta.dispositivo);
-
-    return;
-
-}
-    
-    if(!respuesta.ok){
-
-        document.getElementById("dni").select();
-
+        abrirModalDispositivo(
+            respuesta.dispositivo || "Desconocido"
+        );
+        return;
+    }
+    // =========================================
+    // ERROR
+    // =========================================
+    if (!respuesta.ok) {
+        document
+            .getElementById("dni")
+            .select();
+        const mensajeError =
+            respuesta.mensaje ||
+            "No se pudo registrar la marcación.";
         mostrarMensaje(
             "error",
-            respuesta.mensaje
+            mensajeError
         );
-
         return;
-
     }
-
+    // =========================================
+    // MARCACIÓN CORRECTA
+    // =========================================
     let texto = "";
-
     switch(respuesta.evento){
-
         case "E1":
-    texto =
-        "¡Bienvenido!<br><br>" +
-        "<span style='font-size:30px;font-weight:bold;'>" +
-        respuesta.empleado +
-        "</span><br><br>" +
-        "Que tengas Buena jornada.";
-
-    break;
-
+            texto =
+                "¡Bienvenido!<br><br>" +
+                "<span style='font-size:30px;font-weight:bold;'>" +
+                (respuesta.empleado || "") +
+                "</span><br><br>" +
+                "Que tengas Buena jornada.";
+            break;
         case "S1":
-            texto = "Salida registrada.";
+            texto =
+                "Salida registrada.";
             break;
-
         case "E2":
-            texto = "Ingreso registrado.";
+            texto =
+                "Ingreso registrado.";
             break;
-
-       case "SF":
-    texto =
-        "<div style='font-size:18px;'>¡Hasta mañana!</div>" +
-        "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
-        respuesta.empleado +
-        "</div>" +
-        "<div style='font-size:18px;'>Que tengas buen Descanso.</div>";
-
-    break;
-
+        case "SF":
+            texto =
+                "<div style='font-size:18px;'>¡Hasta mañana!</div>" +
+                "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
+                (respuesta.empleado || "") +
+                "</div>" +
+                "<div style='font-size:18px;'>Que tengas buen Descanso.</div>";
+            break;
         case "A1":
-    texto =
-        "<div style='font-size:18px;'>¡Almuerzo Registrado!</div>" +
-        "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
-        respuesta.empleado +
-        "</div>" +
-        "<div style='font-size:18px;'>Disfrutá tu Descanso.</div>";
-
-    break;
-
-        case "A2":
-            texto = "Final de almuerzo registrado.";
+            texto =
+                "<div style='font-size:18px;'>¡Almuerzo Registrado!</div>" +
+                "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
+                (respuesta.empleado || "") +
+                "</div>" +
+                "<div style='font-size:18px;'>Disfrutá tu Descanso.</div>";
             break;
-
+        case "A2":
+            texto =
+                "Final de almuerzo registrado.";
+            break;
         default:
-            texto = "Marcación registrada correctamente.";
-
+            texto =
+                "Marcación registrada correctamente.";
     }
-
-    mostrarMensaje("ok", texto);
-
-    document.getElementById("dni").value = "";
-    document.getElementById("dni").focus();
-
+    mostrarMensaje(
+        "ok",
+        texto
+    );
+    document
+        .getElementById("dni")
+        .value = "";
+    document
+        .getElementById("dni")
+        .focus();
 }
