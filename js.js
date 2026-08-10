@@ -518,3 +518,60 @@ function respuestaMarcacion(respuesta){
         .getElementById("dni")
         .focus();
 }
+
+async function actualizarAplicacion() {
+    const boton =
+        document.getElementById("btnActualizarApp");
+    if (boton) {
+        boton.disabled = true;
+        boton.textContent = "Actualizando...";
+    }
+    try {
+        // =========================================
+        // DESREGISTRAR SERVICE WORKER
+        // =========================================
+        if ("serviceWorker" in navigator) {
+            const registrations =
+                await navigator.serviceWorker
+                    .getRegistrations();
+            for (const registration of registrations) {
+                await registration.unregister();
+            }
+        }
+        // =========================================
+        // BORRAR CACHE DE LA APLICACIÓN
+        // =========================================
+        if ("caches" in window) {
+            const cacheNames =
+                await caches.keys();
+            await Promise.all(
+                cacheNames
+                    .filter(function(nombre) {
+                        return nombre.startsWith(
+                            "control-horario-"
+                        );
+                    })
+                    .map(function(nombre) {
+                        return caches.delete(nombre);
+                    })
+            );
+        }
+        // =========================================
+        // RECARGAR APLICACIÓN
+        // =========================================
+        window.location.reload();
+    } catch (error) {
+        console.error(
+            "Error actualizando aplicación:",
+            error
+        );
+        if (boton) {
+            boton.disabled = false;
+            boton.textContent =
+                "Actualizar aplicación";
+        }
+        alert(
+            "No se pudo actualizar la aplicación."
+        );
+    }
+}
