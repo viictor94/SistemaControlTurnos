@@ -223,7 +223,7 @@ function validarEmpleado(){
     mostrarCarga();
 
     fetch(
-    "https://script.google.com/macros/s/AKfycbxCdDy-UJ5gG8ghlZHnhARXumSJPibwnW8ELfU9u8a45BNl33YIy-6GPvHvhZGiqXgn/exec"
+    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
     + "?accion=registrarMarcacion"
     + "&dni=" + encodeURIComponent(dniIngresado)
     + "&dispositivo=" + encodeURIComponent(obtenerIdDispositivo())
@@ -268,7 +268,7 @@ function registrarAlmuerzo(){
     mostrarCarga();
 
 fetch(
-    "https://script.google.com/macros/s/AKfycbxCdDy-UJ5gG8ghlZHnhARXumSJPibwnW8ELfU9u8a45BNl33YIy-6GPvHvhZGiqXgn/exec"
+    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
     + "?accion=registrarAlmuerzo"
     + "&dni=" + encodeURIComponent(dniIngresado)
     + "&dispositivo=" + encodeURIComponent(obtenerIdDispositivo())
@@ -392,7 +392,7 @@ function guardarJustificacion(){
     mostrarCarga();
 
 fetch(
-    "https://script.google.com/macros/s/AKfycbxCdDy-UJ5gG8ghlZHnhARXumSJPibwnW8ELfU9u8a45BNl33YIy-6GPvHvhZGiqXgn/exec"
+    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
     + "?accion=registrarMarcacion"
     + "&dni=" + encodeURIComponent(dniPendiente)
     + "&motivo=" + encodeURIComponent(motivo)
