@@ -1,7 +1,6 @@
+const URL_API = "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec";
 function actualizarHora(){
-
     const ahora = new Date();
-
     document.getElementById("hora").innerHTML =
         ahora.toLocaleTimeString("es-AR",{
             hour:"2-digit",
@@ -9,7 +8,6 @@ function actualizarHora(){
             second:"2-digit",
             hour12:false
         });
-
     document.getElementById("fecha").innerHTML =
         ahora.toLocaleDateString("es-AR",{
             weekday:"long",
@@ -17,23 +15,17 @@ function actualizarHora(){
             month:"long",
             day:"numeric"
         });
-
 }
-
 /*=========================================
   OVERLAY DE CARGA
 =========================================*/
-
 function mostrarCarga(){
-
     document
         .getElementById("overlayCarga")
-        .classList.add("mostrar");
-
+       .classList.add("mostrar");
     document.getElementById("btnMarcar").disabled = true;
     document.getElementById("btnAlmuerzo").disabled = true;
     document.getElementById("dni").disabled = true;
-
 }
 
 function ocultarCarga(){
