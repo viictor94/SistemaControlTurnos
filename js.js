@@ -207,99 +207,97 @@ setTimeout(function(){
 /*=========================================
   VALIDAR EMPLEADO
 =========================================*/
-
 function validarEmpleado(){
-
-    const dniIngresado = dni.value.trim();
-
-    if(dniIngresado==""){
-
+    const dniIngresado =
+        dni.value.trim();
+    if(dniIngresado == ""){
         mostrarMensaje(
             "alerta",
             "Ingrese un DNI."
         );
-
         return;
-
     }
-
     mostrarCarga();
-
-    fetch(
-    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
-    + "?accion=registrarMarcacion"
-    + "&dni=" + encodeURIComponent(dniIngresado)
-    + "&dispositivo=" + encodeURIComponent(obtenerIdDispositivo())
-)
-
-.then(response => response.json())
-
-.then(respuestaMarcacion)
-
-.catch(function(error){
-
-    ocultarCarga();
-
-    mostrarMensaje(
-        "error",
-        "Error de comunicación con el servidor."
-    );
-
-    console.error(error);
-
-});
+    const url =
+        URL_API +
+        "?accion=registrarMarcacion" +
+        "&dni=" +
+        encodeURIComponent(dniIngresado) +
+        "&dispositivo=" +
+        encodeURIComponent(
+            obtenerIdDispositivo()
+       );
+    fetch(url)
+        .then(function(response){
+            if(!response.ok){
+                throw new Error(
+                    "HTTP " + response.status
+                );
+            }
+            return response.json();
+        })
+       .then(respuestaMarcacion)
+        .catch(function(error){
+            ocultarCarga();
+            mostrarMensaje(
+               "error",
+               "No se pudo confirmar la respuesta del servidor."
+           );
+            console.error(
+               "Error registrarMarcacion:",
+               error
+           );
+        });
 }
+
 /*=========================================
   ALMUERZO
 =========================================*/
-
 function registrarAlmuerzo(){
-
-    const dniIngresado = dni.value.trim();
-
-    if(dniIngresado==""){
-
+    const dniIngresado =
+        dni.value.trim();
+    if(dniIngresado == ""){
         mostrarMensaje(
             "alerta",
             "Ingrese un DNI."
         );
-
         return;
-
-    }
-
+   }
     mostrarCarga();
-
-fetch(
-    "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec"
-    + "?accion=registrarAlmuerzo"
-    + "&dni=" + encodeURIComponent(dniIngresado)
-    + "&dispositivo=" + encodeURIComponent(obtenerIdDispositivo())
-)
-
-.then(response => response.json())
-
-.then(respuestaMarcacion)
-
-.catch(function(error){
-
-    ocultarCarga();
-
-    mostrarMensaje(
-        "error",
-        "Error de comunicación con el servidor."
-    );
-
-    console.error(error);
-
-});
-
+    const url =
+       URL_API +
+       "?accion=registrarAlmuerzo" +
+       "&dni=" +
+       encodeURIComponent(dniIngresado) +
+       "&dispositivo=" +
+       encodeURIComponent(
+           obtenerIdDispositivo()
+       );
+    fetch(url)
+        .then(function(response){
+            if(!response.ok){
+               throw new Error(
+                   "HTTP " + response.status
+               );
+           }
+            return response.json();
+        })
+        .then(respuestaMarcacion)
+        .catch(function(error){
+            ocultarCarga();
+            mostrarMensaje(
+               "error",
+               "No se pudo confirmar la respuesta del servidor."
+           );
+            console.error(
+               "Error registrarAlmuerzo:",
+               error
+           );
+        });
 }
 
 function abrirModalJustificacion(dni){
-
     dniPendiente = dni;
-
     document.getElementById("txtJustificacion").value = "";
     document.getElementById("contadorJustificacion").innerHTML ="0 / 150";
 
