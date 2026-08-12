@@ -136,6 +136,9 @@ document
     .getElementById("btnCancelarJustificacion")
     .addEventListener("click", cancelarJustificacion);
 document
+    .getElementById("btnGuardarJustificacion")
+    .addEventListener("click", guardarJustificacion);
+document
     .getElementById("btnCerrarDispositivo")
     .addEventListener("click", cerrarModalDispositivo);
 
