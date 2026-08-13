@@ -142,58 +142,46 @@ document
   MENSAJES
 =========================================*/
 
-function mostrarMensaje(tipo,texto){
-
-    const caja = document.getElementById("notificacion");
-    const icono = document.getElementById("iconoMensaje");
-    const mensaje = document.getElementById("textoMensaje");
-
+function mostrarMensaje(tipo, texto){
+    const caja =
+        document.getElementById("notificacion");
+    const icono =
+        document.getElementById("iconoMensaje");
+    const mensaje =
+        document.getElementById("textoMensaje");
     caja.className = "";
-
-    switch(tipo){
-
+   switch(tipo){
         case "ok":
-
             caja.classList.add("exito");
             icono.innerHTML = "✅";
             break;
-
         case "error":
-
             caja.classList.add("error");
             icono.innerHTML = "⛔";
             break;
-
         case "alerta":
-
             caja.classList.add("alerta");
             icono.innerHTML = "⚠️";
             break;
-
-        default:
-
+       default:
             caja.classList.add("info");
             icono.innerHTML = "ℹ️";
-
     }
-
-    mensaje.innerHTML = texto;
-
+    mensaje.innerHTML =
+        texto ||
+        "Ocurrió un error inesperado.";
     caja.classList.add("mostrar");
     document
-    .getElementById("overlayNotificacion")
-    .classList.add("mostrar");
-
-setTimeout(function(){
-
-    caja.classList.remove("mostrar");
-
-    document
         .getElementById("overlayNotificacion")
-        .classList.remove("mostrar");
-
-},2000);
-
+        .classList
+        .add("mostrar");
+    setTimeout(function(){
+        caja.classList.remove("mostrar");
+        document
+           .getElementById("overlayNotificacion")
+            .classList
+            .remove("mostrar");
+    }, 2000);
 }
 
 /*=========================================
