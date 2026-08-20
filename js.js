@@ -91,18 +91,6 @@ window.onload = function(){
   EVENTOS
 =========================================*/
 
-dni.addEventListener("keypress",function(e){
-
-    if(dni.disabled){
-        return;
-    }
-
-    if(e.key==="Enter"){
-        validarEmpleado();
-    }
-
-});
-
 document.addEventListener("keydown",function(e){
 
     if(e.key==="F2"){
