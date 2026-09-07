@@ -15,7 +15,24 @@
 </head>
 
 <body>
-    <div class="layout">
+    <div id="loginAdmin" class="login-admin">
+        <div class="login-admin-caja">
+            <img src="../logo2.png" alt="Panther">
+            <h2>Acceso administrador</h2>
+            <p>Ingrese la contraseña para continuar.</p>
+            <input
+                type="password"
+                id="txtClaveAdmin"
+                placeholder="Contraseña"
+                autocomplete="off">
+            <div id="errorLoginAdmin" class="login-admin-error"></div>
+            <button id="btnLoginAdmin" type="button">
+                Ingresar
+            </button>
+        </div>
+    </div>
+
+    <div class="layout" id="layoutAdmin" style="display:none;">
         <aside class="sidebar">
             <div class="logo">
                 <img src="../logo2.png" alt="Panther">

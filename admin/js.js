@@ -1,8 +1,111 @@
 /*=======================================
   DASHBOARD
 =========================================*/
+function escaparHTML(texto){
+    return String(texto == null ? "" : texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+/*=======================================
+  LOGIN ADMIN (solo frontend)
+  -----------------------------------------
+  IMPORTANTE: esto es un candado de cortesía,
+  no un control de seguridad real. El backend
+  (Apps Script) no valida nada de esto, así
+  que quien conozca la URL de la API puede
+  seguir llamándola directo sin pasar por acá.
+  Sirve solo para que no cualquiera que abra
+  la página vea el panel a simple vista.
+=========================================*/
+
+// Reemplazar por el hash de la clave elegida.
+// Generarlo en la consola del navegador con:
+//   generarHashClaveAdmin("miClaveNueva")
+const ADMIN_CLAVE_HASH =
+    "46566f29b516260b087aa137763b79710a894bc029d8a8f4b01504c7d1c7646c";
+
+const ADMIN_SESSION_KEY = "PTH_ADMIN_AUTORIZADO";
+
+async function sha256Hex(texto){
+    const buffer = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(texto)
+    );
+    return Array.from(new Uint8Array(buffer))
+        .map(function(b){
+            return b.toString(16).padStart(2, "0");
+        })
+        .join("");
+}
+
+// Utilidad para generar el hash de una clave nueva
+// desde la consola del navegador.
+window.generarHashClaveAdmin = function(clave){
+    sha256Hex(clave).then(function(hash){
+        console.log("Hash para ADMIN_CLAVE_HASH:", hash);
+    });
+};
+
+function estaAutorizado(){
+    return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
+}
+
+function mostrarLoginAdmin(){
+    document.getElementById("loginAdmin").style.display = "flex";
+    document.getElementById("layoutAdmin").style.display = "none";
+    document.getElementById("txtClaveAdmin").focus();
+}
+
+function ocultarLoginAdmin(){
+    document.getElementById("loginAdmin").style.display = "none";
+    document.getElementById("layoutAdmin").style.display = "flex";
+}
+
+async function intentarLoginAdmin(){
+    const clave =
+        document.getElementById("txtClaveAdmin").value;
+    const boton =
+        document.getElementById("btnLoginAdmin");
+    boton.disabled = true;
+    const hash = await sha256Hex(clave);
+    boton.disabled = false;
+    if(hash === ADMIN_CLAVE_HASH){
+        sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+        document.getElementById("errorLoginAdmin").textContent = "";
+        document.getElementById("txtClaveAdmin").value = "";
+        ocultarLoginAdmin();
+        cargarDashboard();
+    }else{
+        document.getElementById("errorLoginAdmin").textContent =
+            "Contraseña incorrecta.";
+        document.getElementById("txtClaveAdmin").select();
+    }
+}
+
+document
+    .getElementById("btnLoginAdmin")
+    .addEventListener("click", intentarLoginAdmin);
+
+document
+    .getElementById("txtClaveAdmin")
+    .addEventListener("keydown", function(e){
+        if(e.key === "Enter"){
+            e.preventDefault();
+            intentarLoginAdmin();
+        }
+    });
+
 window.addEventListener("load", function(){
-    cargarDashboard();
+    if(estaAutorizado()){
+        ocultarLoginAdmin();
+        cargarDashboard();
+    }else{
+        mostrarLoginAdmin();
+    }
 });
 const URL_API = "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec";function cargarDashboard(){
     document
@@ -60,20 +163,20 @@ function cargarIncidencias(lista){
             sucursalActual = item.sucursal;
             contenedor.innerHTML += `
                 <div class="tituloSucursal">
-                    ${item.sucursal}
+                    ${escaparHTML(item.sucursal)}
                 </div>
             `;
         }
         contenedor.innerHTML += `
             <div class="incidencia">
                 <div class="empleado">
-                    ${item.empleado}
+                    ${escaparHTML(item.empleado)}
                 </div>
                 <div class="tipo">
-                    ${item.tipo}
+                    ${escaparHTML(item.tipo)}
                 </div>
                 <div class="observacion">
-                    ${item.observacion}
+                    ${escaparHTML(item.observacion)}
                 </div>
             </div>
         `;
@@ -96,16 +199,16 @@ function cargarUltimasMarcaciones(lista){
         contenedor.innerHTML += `
             <div class="marcacion">
                 <div class="marcacion-hora">
-                    ${item.hora}
+                    ${escaparHTML(item.hora)}
                 </div>
                 <div class="marcacion-empleado">
-                    ${item.empleado}
+                    ${escaparHTML(item.empleado)}
                 </div>
                 <div class="marcacion-evento">
-                    ${item.evento}
+                    ${escaparHTML(item.evento)}
                 </div>
                 <div class="marcacion-sucursal">
-                    Sucursal ${item.sucursal}
+                    Sucursal ${escaparHTML(item.sucursal)}
                 </div>
             </div>
         `;
@@ -290,17 +393,17 @@ function renderizarEmpleados(lista){
     lista.forEach(function(e){
         tabla.innerHTML += `
             <tr>
-                <td>${e.legajo}</td>
-                <td>${e.dni}</td>
-                <td>${e.apellido}</td>
-                <td>${e.nombre}</td>
-                <td>${e.sucursal}</td>
-                <td>${e.turno}</td>
-                <td>${e.estado}</td>
+                <td>${escaparHTML(e.legajo)}</td>
+                <td>${escaparHTML(e.dni)}</td>
+                <td>${escaparHTML(e.apellido)}</td>
+                <td>${escaparHTML(e.nombre)}</td>
+                <td>${escaparHTML(e.sucursal)}</td>
+                <td>${escaparHTML(e.turno)}</td>
+                <td>${escaparHTML(e.estado)}</td>
                 <td>
                     <button
                     class="btnEditarEmpleado"
-                    onclick="editarEmpleado('${e.dni}')"
+                    data-dni="${escaparHTML(e.dni)}"
                   >
                     <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -309,6 +412,15 @@ function renderizarEmpleados(lista){
         `;
     });
 }
+
+document
+    .getElementById("tablaEmpleados")
+    .addEventListener("click", function(e){
+        const boton = e.target.closest(".btnEditarEmpleado");
+        if(boton){
+            editarEmpleado(boton.dataset.dni);
+        }
+    });
 
 document
     .getElementById("buscarEmpleado")

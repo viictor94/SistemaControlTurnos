@@ -23,6 +23,87 @@ body{
 }
 
 /*=========================================
+  LOGIN ADMIN
+=========================================*/
+.login-admin{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(180deg,#f8fbf8,#eef5ef);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:100000;
+}
+
+.login-admin-caja{
+    width:340px;
+    max-width:90%;
+    background:#ffffff;
+    border-radius:14px;
+    padding:36px 32px;
+    text-align:center;
+    box-shadow:0 12px 35px rgba(0,0,0,.12);
+}
+
+.login-admin-caja img{
+    width:110px;
+    margin-bottom:18px;
+}
+
+.login-admin-caja h2{
+    font-size:20px;
+    font-weight:700;
+    color:#1e293b;
+    margin-bottom:6px;
+}
+
+.login-admin-caja p{
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:18px;
+}
+
+.login-admin-caja input{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid #d9d9d9;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+    text-align:center;
+}
+
+.login-admin-caja input:focus{
+    border-color:#3e863c;
+}
+
+.login-admin-error{
+    min-height:18px;
+    margin-top:8px;
+    font-size:13px;
+    font-weight:600;
+    color:#d32f2f;
+}
+
+.login-admin-caja button{
+    width:100%;
+    margin-top:10px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#3e863c;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.login-admin-caja button:hover{
+    background:#2f6c2e;
+}
+
+/*=========================================
   SIDEBAR
 ========================================*/
 .sidebar{
