@@ -26,7 +26,7 @@ function escaparHTML(texto){
 // Generarlo en la consola del navegador con:
 //   generarHashClaveAdmin("miClaveNueva")
 const ADMIN_CLAVE_HASH =
-    "7463be4dacb2f4925d7c8f0f876a10162929060d92f8fe4eec6b4e8ee6ba8156";
+    "46566f29b516260b087aa137763b79710a894bc029d8a8f4b01504c7d1c7646c";
 
 const ADMIN_SESSION_KEY = "PTH_ADMIN_AUTORIZADO";
 
