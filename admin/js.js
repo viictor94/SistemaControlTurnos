@@ -1,6 +1,14 @@
 /*=======================================
   DASHBOARD
 =========================================*/
+function escaparHTML(texto){
+    return String(texto == null ? "" : texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
 window.addEventListener("load", function(){
     cargarDashboard();
 });
@@ -60,20 +68,20 @@ function cargarIncidencias(lista){
             sucursalActual = item.sucursal;
             contenedor.innerHTML += `
                 <div class="tituloSucursal">
-                    ${item.sucursal}
+                    ${escaparHTML(item.sucursal)}
                 </div>
             `;
         }
         contenedor.innerHTML += `
             <div class="incidencia">
                 <div class="empleado">
-                    ${item.empleado}
+                    ${escaparHTML(item.empleado)}
                 </div>
                 <div class="tipo">
-                    ${item.tipo}
+                    ${escaparHTML(item.tipo)}
                 </div>
                 <div class="observacion">
-                    ${item.observacion}
+                    ${escaparHTML(item.observacion)}
                 </div>
             </div>
         `;
@@ -96,16 +104,16 @@ function cargarUltimasMarcaciones(lista){
         contenedor.innerHTML += `
             <div class="marcacion">
                 <div class="marcacion-hora">
-                    ${item.hora}
+                    ${escaparHTML(item.hora)}
                 </div>
                 <div class="marcacion-empleado">
-                    ${item.empleado}
+                    ${escaparHTML(item.empleado)}
                 </div>
                 <div class="marcacion-evento">
-                    ${item.evento}
+                    ${escaparHTML(item.evento)}
                 </div>
                 <div class="marcacion-sucursal">
-                    Sucursal ${item.sucursal}
+                    Sucursal ${escaparHTML(item.sucursal)}
                 </div>
             </div>
         `;
@@ -290,17 +298,17 @@ function renderizarEmpleados(lista){
     lista.forEach(function(e){
         tabla.innerHTML += `
             <tr>
-                <td>${e.legajo}</td>
-                <td>${e.dni}</td>
-                <td>${e.apellido}</td>
-                <td>${e.nombre}</td>
-                <td>${e.sucursal}</td>
-                <td>${e.turno}</td>
-                <td>${e.estado}</td>
+                <td>${escaparHTML(e.legajo)}</td>
+                <td>${escaparHTML(e.dni)}</td>
+                <td>${escaparHTML(e.apellido)}</td>
+                <td>${escaparHTML(e.nombre)}</td>
+                <td>${escaparHTML(e.sucursal)}</td>
+                <td>${escaparHTML(e.turno)}</td>
+                <td>${escaparHTML(e.estado)}</td>
                 <td>
                     <button
                     class="btnEditarEmpleado"
-                    onclick="editarEmpleado('${e.dni}')"
+                    data-dni="${escaparHTML(e.dni)}"
                   >
                     <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -309,6 +317,15 @@ function renderizarEmpleados(lista){
         `;
     });
 }
+
+document
+    .getElementById("tablaEmpleados")
+    .addEventListener("click", function(e){
+        const boton = e.target.closest(".btnEditarEmpleado");
+        if(boton){
+            editarEmpleado(boton.dataset.dni);
+        }
+    });
 
 document
     .getElementById("buscarEmpleado")

@@ -1,4 +1,12 @@
 const URL_API = "https://script.google.com/macros/s/AKfycbxRXoVORF37ymDqaglRTyO2p5lYynOZPr_0VPmO6ec8YaLvV9g5C23cFm0J-CXD-iMC/exec";
+function escaparHTML(texto){
+    return String(texto == null ? "" : texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
 function actualizarHora(){
     const ahora = new Date();
     document.getElementById("hora").innerHTML =
@@ -309,7 +317,7 @@ function cerrarModalJustificacion(){
 
 function abrirModalDispositivo(id){
 
-    document.getElementById("codigoDispositivo").innerHTML = id;
+    document.getElementById("codigoDispositivo").textContent = id;
 
     document
         .getElementById("modalDispositivo")
@@ -440,7 +448,7 @@ function respuestaMarcacion(respuesta){
             texto =
                 "¡Bienvenido!<br><br>" +
                 "<span style='font-size:30px;font-weight:bold;'>" +
-                (respuesta.empleado || "") +
+                escaparHTML(respuesta.empleado || "") +
                 "</span><br><br>" +
                 "Que tengas Buena jornada.";
             break;
@@ -456,7 +464,7 @@ function respuestaMarcacion(respuesta){
             texto =
                 "<div style='font-size:18px;'>¡Hasta mañana!</div>" +
                 "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
-                (respuesta.empleado || "") +
+                escaparHTML(respuesta.empleado || "") +
                 "</div>" +
                 "<div style='font-size:18px;'>Que tengas buen Descanso.</div>";
             break;
@@ -464,7 +472,7 @@ function respuestaMarcacion(respuesta){
             texto =
                 "<div style='font-size:18px;'>¡Almuerzo Registrado!</div>" +
                 "<div style='font-size:32px;font-weight:700;margin:8px 0;color:#3e863c;'>" +
-                (respuesta.empleado || "") +
+                escaparHTML(respuesta.empleado || "") +
                 "</div>" +
                 "<div style='font-size:18px;'>Disfrutá tu Descanso.</div>";
             break;
